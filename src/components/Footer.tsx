@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <footer className="bg-gradient-to-b from-primary to-primary/90 text-primary-foreground">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
@@ -47,6 +47,28 @@ const Footer = () => {
               </Link>
               <Link to="/contact" className="text-primary-foreground/80 hover:text-accent transition-colors">
                 تماس با ما
+              </Link>
+            </nav>
+          </div>
+
+          {/* Categories */}
+          <div className="space-y-4">
+            <h3 className="font-semibold text-lg text-accent">دسته‌بندی</h3>
+            <nav className="flex flex-col space-y-2">
+              <Link to="/category/scarves" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                شال
+              </Link>
+              <Link to="/category/hijabs" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                روسری
+              </Link>
+              <Link to="/category/mantuas" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                مانتو
+              </Link>
+              <Link to="/category/bags" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                کیف
+              </Link>
+              <Link to="/category/accessories" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                لوازم جانبی
               </Link>
             </nav>
           </div>
