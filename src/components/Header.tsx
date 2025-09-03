@@ -12,7 +12,7 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-50 glass-effect shadow-soft">
       <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-center lg:justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <div className="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center">
@@ -42,7 +42,11 @@ const Header = () => {
               </button>
               
               {isCategoriesOpen && (
-                <div className="absolute top-full right-0 mt-2 w-48 bg-background border border-border rounded-lg shadow-lg animate-fade-in z-50">
+                <div 
+                  className="absolute top-full right-0 mt-2 w-48 bg-background border border-border rounded-lg shadow-lg animate-fade-in z-50"
+                  onMouseEnter={() => setIsCategoriesOpen(true)}
+                  onMouseLeave={() => setIsCategoriesOpen(false)}
+                >
                   <div className="py-2">
                     <Link 
                       to="/category/scarves" 
