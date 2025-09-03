@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ShoppingBag, User, Search, Menu, X } from 'lucide-react';
+import { ShoppingBag, User, Search, Menu, X, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -28,6 +29,56 @@ const Header = () => {
             <Link to="/products" className="text-foreground hover:text-primary transition-colors duration-300">
               محصولات
             </Link>
+            
+            {/* Categories Dropdown */}
+            <div 
+              className="relative"
+              onMouseEnter={() => setIsCategoriesOpen(true)}
+              onMouseLeave={() => setIsCategoriesOpen(false)}
+            >
+              <button className="flex items-center space-x-reverse space-x-1 text-foreground hover:text-primary transition-colors duration-300">
+                <span>دسته‌بندی</span>
+                <ChevronDown className="w-4 h-4" />
+              </button>
+              
+              {isCategoriesOpen && (
+                <div className="absolute top-full right-0 mt-2 w-48 bg-background border border-border rounded-lg shadow-lg animate-fade-in z-50">
+                  <div className="py-2">
+                    <Link 
+                      to="/category/scarves" 
+                      className="block px-4 py-2 text-foreground hover:bg-muted hover:text-primary transition-colors"
+                    >
+                      شال
+                    </Link>
+                    <Link 
+                      to="/category/hijabs" 
+                      className="block px-4 py-2 text-foreground hover:bg-muted hover:text-primary transition-colors"
+                    >
+                      روسری
+                    </Link>
+                    <Link 
+                      to="/category/mantuas" 
+                      className="block px-4 py-2 text-foreground hover:bg-muted hover:text-primary transition-colors"
+                    >
+                      مانتو
+                    </Link>
+                    <Link 
+                      to="/category/bags" 
+                      className="block px-4 py-2 text-foreground hover:bg-muted hover:text-primary transition-colors"
+                    >
+                      کیف
+                    </Link>
+                    <Link 
+                      to="/category/accessories" 
+                      className="block px-4 py-2 text-foreground hover:bg-muted hover:text-primary transition-colors"
+                    >
+                      لوازم جانبی
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+            
             <Link to="/about" className="text-foreground hover:text-primary transition-colors duration-300">
               درباره ما
             </Link>
@@ -83,6 +134,47 @@ const Header = () => {
               >
                 محصولات
               </Link>
+              
+              {/* Mobile Categories */}
+              <div className="space-y-2 pr-4 border-r-2 border-muted">
+                <div className="text-sm font-medium text-muted-foreground">دسته‌بندی:</div>
+                <Link 
+                  to="/category/scarves" 
+                  className="block text-sm text-foreground hover:text-primary transition-colors duration-300"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  شال
+                </Link>
+                <Link 
+                  to="/category/hijabs" 
+                  className="block text-sm text-foreground hover:text-primary transition-colors duration-300"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  روسری
+                </Link>
+                <Link 
+                  to="/category/mantuas" 
+                  className="block text-sm text-foreground hover:text-primary transition-colors duration-300"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  مانتو
+                </Link>
+                <Link 
+                  to="/category/bags" 
+                  className="block text-sm text-foreground hover:text-primary transition-colors duration-300"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  کیف
+                </Link>
+                <Link 
+                  to="/category/accessories" 
+                  className="block text-sm text-foreground hover:text-primary transition-colors duration-300"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  لوازم جانبی
+                </Link>
+              </div>
+              
               <Link 
                 to="/about" 
                 className="text-foreground hover:text-primary transition-colors duration-300"
