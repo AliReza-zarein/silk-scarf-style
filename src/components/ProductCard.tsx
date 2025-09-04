@@ -2,6 +2,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Heart, ShoppingCart } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useCart } from '@/context/CartContext';
+import { useWishlist } from '@/context/WishlistContext';
 
 interface ProductCardProps {
   id: string;
@@ -22,6 +24,20 @@ const ProductCard = ({
   isNew = false, 
   isSale = false 
 }: ProductCardProps) => {
+  const { addToCart } = useCart();
+  const { addToWishlist, isInWishlist, removeFromWishlist } = useWishlist();
+
+  const handleAddToCart = () => {
+    addToCart({ id, name, price, image });
+  };
+
+  const handleWishlistToggle = () => {
+    if (isInWishlist(id)) {
+      removeFromWishlist(id);
+    } else {
+      addToWishlist({ id, name, price, image });
+    }
+  };
   return (
     <Card className="group overflow-hidden hover-lift bg-gradient-card border-0 shadow-soft">
       <div className="relative overflow-hidden">
@@ -49,9 +65,10 @@ const ProductCard = ({
         <Button 
           variant="ghost" 
           size="icon"
+          onClick={handleWishlistToggle}
           className="absolute top-3 left-3 bg-background/80 hover:bg-background opacity-0 group-hover:opacity-100 transition-all duration-300"
         >
-          <Heart className="w-4 h-4" />
+          <Heart className={`w-4 h-4 ${isInWishlist(id) ? 'fill-red-500 text-red-500' : ''}`} />
         </Button>
 
         {/* Quick Actions */}
@@ -62,7 +79,7 @@ const ProductCard = ({
                 مشاهده جزئیات
               </Button>
             </Link>
-            <Button variant="default" size="sm">
+            <Button variant="default" size="sm" onClick={handleAddToCart}>
               <ShoppingCart className="w-4 h-4" />
             </Button>
           </div>

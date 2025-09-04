@@ -107,10 +107,10 @@ const Home = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {categories.map((category, index) => (
-              <Card key={index} className={`${category.color} text-white border-0 hover-lift cursor-pointer group`}>
+              <Card key={index} className={`${category.color} border-0 hover-lift cursor-pointer group`}>
                 <CardContent className="p-6 text-center">
-                  <h3 className="font-semibold text-lg mb-2">{category.name}</h3>
-                  <Badge variant="secondary" className="bg-white/20 text-white">
+                  <h3 className="font-semibold text-lg mb-2 text-white drop-shadow-lg">{category.name}</h3>
+                  <Badge variant="secondary" className="bg-white/90 text-gray-800 font-medium">
                     {category.count} محصول
                   </Badge>
                 </CardContent>
@@ -146,29 +146,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Newsletter Section */}
-      <section className="py-16 bg-gradient-hero">
-        <div className="container mx-auto px-4 text-center">
-          <div className="max-w-2xl mx-auto animate-scale-in">
-            <h2 className="text-4xl font-bold text-white mb-4">
-              از آخرین مجموعه‌ها باخبر شوید
-            </h2>
-            <p className="text-xl text-white/90 mb-8">
-              در خبرنامه ما عضو شوید و از تخفیف‌های ویژه اطلاع پیدا کنید
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-              <input
-                type="email"
-                placeholder="ایمیل شما"
-                className="flex-1 px-4 py-3 rounded-lg border-0 focus:outline-none focus:ring-2 focus:ring-accent"
-              />
-              <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                عضویت
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <Footer />
     </div>

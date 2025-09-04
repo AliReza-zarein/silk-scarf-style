@@ -40,7 +40,7 @@ const Header = () => {
                 <ChevronDown className="w-4 h-4" />
               </button>
               
-              <div className="absolute top-full right-0 mt-0 w-48 bg-background border border-border rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+              <div className="absolute top-full right-0 mt-0 w-48 bg-background/95 backdrop-blur-sm border border-border rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 text-right">
                 <div className="py-2">
                   <Link 
                     to="/category/scarves" 

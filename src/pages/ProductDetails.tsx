@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useCart } from '@/context/CartContext';
+import { useWishlist } from '@/context/WishlistContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -15,6 +17,8 @@ import scarf2 from '@/assets/scarf2.jpg';
 
 const ProductDetails = () => {
   const { id } = useParams();
+  const { addToCart } = useCart();
+  const { addToWishlist, isInWishlist, removeFromWishlist } = useWishlist();
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState('متوسط');
   const [activeImage, setActiveImage] = useState(0);
@@ -59,6 +63,33 @@ const ProductDetails = () => {
 
   const increaseQuantity = () => setQuantity(prev => prev + 1);
   const decreaseQuantity = () => setQuantity(prev => prev > 1 ? prev - 1 : 1);
+
+  const handleAddToCart = () => {
+    for (let i = 0; i < quantity; i++) {
+      addToCart({ 
+        id: product.id, 
+        name: product.name, 
+        price: product.price, 
+        image: product.images[0],
+        size: selectedSize
+      });
+    }
+  };
+
+  const handleWishlistToggle = () => {
+    const wishlistItem = {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.images[0]
+    };
+    
+    if (isInWishlist(product.id)) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(wishlistItem);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -200,12 +231,12 @@ const ProductDetails = () => {
 
             {/* Action Buttons */}
             <div className="flex gap-4">
-              <Button size="lg" className="flex-1 bg-gradient-primary text-primary-foreground">
+              <Button size="lg" className="flex-1 bg-gradient-primary text-primary-foreground" onClick={handleAddToCart}>
                 <ShoppingCart className="w-5 h-5 ml-2" />
                 افزودن به سبد خرید
               </Button>
-              <Button variant="outline" size="lg">
-                <Heart className="w-5 h-5" />
+              <Button variant="outline" size="lg" onClick={handleWishlistToggle}>
+                <Heart className={`w-5 h-5 ${isInWishlist(product.id) ? 'fill-red-500 text-red-500' : ''}`} />
               </Button>
             </div>
 
@@ -239,23 +270,23 @@ const ProductDetails = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {relatedProducts.map((product) => (
-              <Card key={product.id} className="group overflow-hidden hover-lift bg-gradient-card border-0 shadow-soft">
-                <div className="relative overflow-hidden">
-                  <img 
-                    src={product.image} 
-                    alt={product.name}
-                    className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                </div>
-                <CardContent className="p-4">
-                  <Link to={`/product/${product.id}`}>
+              <Link key={product.id} to={`/product/${product.id}`}>
+                <Card className="group overflow-hidden hover-lift bg-gradient-card border-0 shadow-soft">
+                  <div className="relative overflow-hidden">
+                    <img 
+                      src={product.image} 
+                      alt={product.name}
+                      className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                  </div>
+                  <CardContent className="p-4">
                     <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
                       {product.name}
                     </h3>
-                  </Link>
-                  <span className="font-bold text-primary">{product.price} تومان</span>
-                </CardContent>
-              </Card>
+                    <span className="font-bold text-primary">{product.price} تومان</span>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
         </section>
