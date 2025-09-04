@@ -32,55 +32,47 @@ const Header = () => {
             
             {/* Categories Dropdown */}
             <div 
-              className="relative"
-              onMouseEnter={() => setIsCategoriesOpen(true)}
-              onMouseLeave={() => setIsCategoriesOpen(false)}
+              className="relative group"
             >
-              <button className="flex items-center space-x-reverse space-x-1 text-foreground hover:text-primary transition-colors duration-300">
+              <button className="flex items-center space-x-reverse space-x-1 text-foreground hover:text-primary transition-colors duration-300 py-2">
                 <span>دسته‌بندی</span>
                 <ChevronDown className="w-4 h-4" />
               </button>
               
-              {isCategoriesOpen && (
-                <div 
-                  className="absolute top-full right-0 mt-2 w-48 bg-background border border-border rounded-lg shadow-lg animate-fade-in z-50"
-                  onMouseEnter={() => setIsCategoriesOpen(true)}
-                  onMouseLeave={() => setIsCategoriesOpen(false)}
-                >
-                  <div className="py-2">
-                    <Link 
-                      to="/category/scarves" 
-                      className="block px-4 py-2 text-foreground hover:bg-muted hover:text-primary transition-colors"
-                    >
-                      شال
-                    </Link>
-                    <Link 
-                      to="/category/hijabs" 
-                      className="block px-4 py-2 text-foreground hover:bg-muted hover:text-primary transition-colors"
-                    >
-                      روسری
-                    </Link>
-                    <Link 
-                      to="/category/mantuas" 
-                      className="block px-4 py-2 text-foreground hover:bg-muted hover:text-primary transition-colors"
-                    >
-                      مانتو
-                    </Link>
-                    <Link 
-                      to="/category/bags" 
-                      className="block px-4 py-2 text-foreground hover:bg-muted hover:text-primary transition-colors"
-                    >
-                      کیف
-                    </Link>
-                    <Link 
-                      to="/category/accessories" 
-                      className="block px-4 py-2 text-foreground hover:bg-muted hover:text-primary transition-colors"
-                    >
-                      لوازم جانبی
-                    </Link>
-                  </div>
+              <div className="absolute top-full right-0 mt-0 w-48 bg-background border border-border rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                <div className="py-2">
+                  <Link 
+                    to="/category/scarves" 
+                    className="block px-4 py-2 text-foreground hover:bg-muted hover:text-primary transition-colors"
+                  >
+                    شال
+                  </Link>
+                  <Link 
+                    to="/category/hijabs" 
+                    className="block px-4 py-2 text-foreground hover:bg-muted hover:text-primary transition-colors"
+                  >
+                    روسری
+                  </Link>
+                  <Link 
+                    to="/category/mantuas" 
+                    className="block px-4 py-2 text-foreground hover:bg-muted hover:text-primary transition-colors"
+                  >
+                    مانتو
+                  </Link>
+                  <Link 
+                    to="/category/bags" 
+                    className="block px-4 py-2 text-foreground hover:bg-muted hover:text-primary transition-colors"
+                  >
+                    کیف
+                  </Link>
+                  <Link 
+                    to="/category/accessories" 
+                    className="block px-4 py-2 text-foreground hover:bg-muted hover:text-primary transition-colors"
+                  >
+                    لوازم جانبی
+                  </Link>
                 </div>
-              )}
+              </div>
             </div>
             
             <Link to="/about" className="text-foreground hover:text-primary transition-colors duration-300">

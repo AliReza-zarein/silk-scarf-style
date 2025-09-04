@@ -18,7 +18,7 @@ const Hero = () => {
 
       {/* Content */}
       <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-2xl">
+        <div className="max-w-2xl mx-auto text-center">
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 animate-fade-in">
             شال و روسری
             <span className="block gradient-text bg-gradient-to-r from-accent to-yellow-300 bg-clip-text text-transparent">
