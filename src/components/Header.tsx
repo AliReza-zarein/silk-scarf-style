@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ShoppingBag, User, Search, Menu, X, ChevronDown } from 'lucide-react';
+import { User, Search, Menu, X, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import Cart from './Cart';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -93,12 +94,7 @@ const Header = () => {
                 <User className="w-5 h-5" />
               </Button>
             </Link>
-            <Button variant="ghost" size="icon" className="relative">
-              <ShoppingBag className="w-5 h-5" />
-              <span className="absolute -top-2 -right-2 bg-accent text-accent-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                0
-              </span>
-            </Button>
+            <Cart />
           </div>
 
           {/* Mobile Menu Button */}
@@ -191,9 +187,7 @@ const Header = () => {
                     ورود / ثبت نام
                   </Button>
                 </Link>
-                <Button variant="ghost" size="icon">
-                  <ShoppingBag className="w-5 h-5" />
-                </Button>
+                <Cart />
               </div>
             </nav>
           </div>

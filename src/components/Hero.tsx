@@ -30,7 +30,7 @@ const Hero = () => {
             مجموعه‌ای منحصر به فرد از بهترین شال‌ها و روسری‌های ایرانی با طراحی‌های مدرن و سنتی
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 animate-scale-in">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-scale-in">
             <Link to="/products">
               <Button 
                 size="lg" 
@@ -43,9 +43,9 @@ const Hero = () => {
             
             <Link to="/about">
               <Button 
-                variant="outline" 
+                variant="secondary" 
                 size="lg"
-                className="border-white text-white hover:bg-white hover:text-primary"
+                className="bg-white/20 border border-white/30 text-white hover:bg-white/30 backdrop-blur-sm"
               >
                 درباره ما
               </Button>
@@ -53,7 +53,7 @@ const Hero = () => {
           </div>
 
           {/* Stats */}
-          <div className="flex flex-wrap gap-8 mt-12 animate-fade-in">
+          <div className="flex flex-wrap gap-8 mt-12 justify-center animate-fade-in">
             <div className="text-center">
               <div className="text-3xl font-bold text-accent">500+</div>
               <div className="text-white/80">محصول</div>
