@@ -86,7 +86,12 @@ const Header = () => {
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-reverse space-x-4">
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" onClick={() => {
+              const searchTerm = prompt('جستجو کنید:');
+              if (searchTerm) {
+                window.location.href = `/products?search=${encodeURIComponent(searchTerm)}`;
+              }
+            }}>
               <Search className="w-5 h-5" />
             </Button>
             <Link to="/login">

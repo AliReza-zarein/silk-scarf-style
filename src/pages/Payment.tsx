@@ -9,35 +9,18 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { CreditCard, MapPin, User, Phone, Mail, Truck, ShoppingBag, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-import scarf1 from '@/assets/scarf1.jpg';
-import hijab1 from '@/assets/hijab1.jpg';
+import { useCart } from '@/context/CartContext';
+import Cart from '@/components/Cart';
 
 const Payment = () => {
   const [paymentMethod, setPaymentMethod] = useState('card');
   const [shippingMethod, setShippingMethod] = useState('normal');
+  const { items: cartItems } = useCart();
 
-  // Mock cart data
-  const cartItems = [
-    {
-      id: '1',
-      name: 'شال ابریشمی بنفش',
-      price: 299000,
-      quantity: 1,
-      image: scarf1,
-      size: 'متوسط'
-    },
-    {
-      id: '2',
-      name: 'روسری گلدار کرم',
-      price: 189000,
-      quantity: 2,
-      image: hijab1,
-      size: 'بزرگ'
-    }
-  ];
-
-  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const subtotal = cartItems.reduce((sum, item) => {
+    const price = parseInt(item.price.replace(/,/g, ''));
+    return sum + (price * item.quantity);
+  }, 0);
   const shippingCost = shippingMethod === 'express' ? 25000 : subtotal > 200000 ? 0 : 15000;
   const discount = 50000; // تخفیف ثابت
   const total = subtotal + shippingCost - discount;
@@ -234,29 +217,39 @@ const Payment = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {/* Cart Items */}
+                 {/* Cart Items */}
                 <div className="space-y-4">
-                  {cartItems.map((item) => (
-                    <div key={item.id} className="flex gap-3">
-                      <div className="relative">
-                        <img 
-                          src={item.image} 
-                          alt={item.name}
-                          className="w-16 h-16 object-cover rounded-lg"
-                        />
-                        <Badge className="absolute -top-2 -right-2 w-6 h-6 rounded-full p-0 flex items-center justify-center text-xs">
-                          {item.quantity}
-                        </Badge>
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="font-medium text-sm">{item.name}</h4>
-                        <p className="text-xs text-muted-foreground">سایز: {item.size}</p>
-                        <p className="font-bold text-primary">
-                          {(item.price * item.quantity).toLocaleString()} تومان
-                        </p>
-                      </div>
+                  {cartItems.length === 0 ? (
+                    <div className="text-center py-8">
+                      <p className="text-muted-foreground">سبد خرید شما خالی است</p>
                     </div>
-                  ))}
+                  ) : (
+                    cartItems.map((item, index) => {
+                      const uniqueKey = `${item.id}-${item.size || 'default'}`;
+                      const price = parseInt(item.price.replace(/,/g, ''));
+                      return (
+                        <div key={uniqueKey} className="flex gap-3">
+                          <div className="relative">
+                            <img 
+                              src={item.image} 
+                              alt={item.name}
+                              className="w-16 h-16 object-cover rounded-lg"
+                            />
+                            <Badge className="absolute -top-2 -right-2 w-6 h-6 rounded-full p-0 flex items-center justify-center text-xs">
+                              {item.quantity}
+                            </Badge>
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-medium text-sm">{item.name}</h4>
+                            {item.size && <p className="text-xs text-muted-foreground">سایز: {item.size}</p>}
+                            <p className="font-bold text-primary">
+                              {(price * item.quantity).toLocaleString()} تومان
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
                 </div>
 
                 <Separator />
@@ -293,12 +286,7 @@ const Payment = () => {
                   پرداخت و تکمیل سفارش
                 </Button>
 
-                <Link to="/cart" className="block">
-                  <Button variant="outline" size="sm" className="w-full">
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                    بازگشت به سبد خرید
-                  </Button>
-                </Link>
+                <Cart />
               </CardContent>
             </Card>
 

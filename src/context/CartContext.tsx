@@ -44,21 +44,25 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  const removeFromCart = (id: string) => {
-    setItems(prevItems => prevItems.filter(item => item.id !== id));
+  const removeFromCart = (uniqueKey: string) => {
+    setItems(prevItems => prevItems.filter(item => {
+      const itemKey = `${item.id}-${item.size || 'default'}`;
+      return itemKey !== uniqueKey;
+    }));
     toast.success('محصول از سبد خرید حذف شد');
   };
 
-  const updateQuantity = (id: string, quantity: number) => {
+  const updateQuantity = (uniqueKey: string, quantity: number) => {
     if (quantity <= 0) {
-      removeFromCart(id);
+      removeFromCart(uniqueKey);
       return;
     }
     
     setItems(prevItems =>
-      prevItems.map(item =>
-        item.id === id ? { ...item, quantity } : item
-      )
+      prevItems.map(item => {
+        const itemKey = `${item.id}-${item.size || 'default'}`;
+        return itemKey === uniqueKey ? { ...item, quantity } : item;
+      })
     );
   };
 

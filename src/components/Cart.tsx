@@ -59,8 +59,10 @@ const Cart = () => {
             </div>
           ) : (
             <div className="space-y-4">
-              {items.map((item, index) => (
-                <div key={`${item.id}-${index}`} className="flex items-center space-x-reverse space-x-4 p-4 border rounded-lg">
+              {items.map((item, index) => {
+                const uniqueKey = `${item.id}-${item.size || 'default'}`;
+                return (
+                <div key={uniqueKey} className="flex items-center space-x-reverse space-x-4 p-4 border rounded-lg">
                   <img 
                     src={item.image} 
                     alt={item.name}
@@ -76,7 +78,7 @@ const Cart = () => {
                       variant="ghost" 
                       size="icon" 
                       className="w-8 h-8"
-                      onClick={() => updateQuantity(`${item.id}-${index}`, item.quantity - 1)}
+                      onClick={() => updateQuantity(uniqueKey, item.quantity - 1)}
                     >
                       <Minus className="w-4 h-4" />
                     </Button>
@@ -85,7 +87,7 @@ const Cart = () => {
                       variant="ghost" 
                       size="icon" 
                       className="w-8 h-8"
-                      onClick={() => updateQuantity(`${item.id}-${index}`, item.quantity + 1)}
+                      onClick={() => updateQuantity(uniqueKey, item.quantity + 1)}
                     >
                       <Plus className="w-4 h-4" />
                     </Button>
@@ -93,13 +95,13 @@ const Cart = () => {
                       variant="ghost" 
                       size="icon" 
                       className="w-8 h-8 text-destructive"
-                      onClick={() => removeFromCart(`${item.id}-${index}`)}
+                      onClick={() => removeFromCart(uniqueKey)}
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
                 </div>
-              ))}
+              );})}
             </div>
           )}
         </ScrollArea>

@@ -40,10 +40,15 @@ const products = [
 const Products = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
+  const [visibleProducts, setVisibleProducts] = useState(6);
 
   const filteredProducts = products.filter(product => 
     selectedCategory === 'all' || product.category === selectedCategory
   );
+
+  const loadMore = () => {
+    setVisibleProducts(prev => prev + 6);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -61,14 +66,14 @@ const Products = () => {
         <div className="flex flex-col md:flex-row gap-4 mb-8 items-center justify-between">
           <div className="flex items-center gap-4">
             <Button variant="outline" size="sm">
-              <Filter className="w-4 h-4 ml-2" />
+              <Filter className="w-4 h-4 mr-2" />
               فیلتر
             </Button>
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="w-48">
+              <SelectTrigger className="w-48 text-right">
                 <SelectValue placeholder="دسته‌بندی" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="text-right">
                 <SelectItem value="all">همه محصولات</SelectItem>
                 <SelectItem value="scarves">شال</SelectItem>
                 <SelectItem value="hijabs">روسری</SelectItem>
@@ -79,10 +84,10 @@ const Products = () => {
           </div>
           
           <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="w-48">
+            <SelectTrigger className="w-48 text-right">
               <SelectValue placeholder="مرتب‌سازی" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="text-right">
               <SelectItem value="newest">جدیدترین</SelectItem>
               <SelectItem value="price-low">قیمت (کم به زیاد)</SelectItem>
               <SelectItem value="price-high">قیمت (زیاد به کم)</SelectItem>
@@ -93,7 +98,7 @@ const Products = () => {
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredProducts.map((product) => (
+          {filteredProducts.slice(0, visibleProducts).map((product) => (
             <ProductCard
               key={product.id}
               id={product.id.toString()}
@@ -106,11 +111,13 @@ const Products = () => {
         </div>
 
         {/* Load More */}
-        <div className="text-center mt-12">
-          <Button variant="outline" size="lg">
-            نمایش بیشتر
-          </Button>
-        </div>
+        {visibleProducts < filteredProducts.length && (
+          <div className="text-center mt-12">
+            <Button variant="outline" size="lg" onClick={loadMore}>
+              نمایش بیشتر
+            </Button>
+          </div>
+        )}
       </main>
 
       <Footer />

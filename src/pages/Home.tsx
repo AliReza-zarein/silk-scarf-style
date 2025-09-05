@@ -110,7 +110,7 @@ const Home = () => {
               <Card key={index} className={`${category.color} border-0 hover-lift cursor-pointer group`}>
                 <CardContent className="p-6 text-center">
                   <h3 className="font-semibold text-lg mb-2 text-white drop-shadow-lg">{category.name}</h3>
-                  <Badge variant="secondary" className="bg-white/90 text-gray-800 font-medium">
+                  <Badge variant="secondary" className="bg-black/80 text-white font-medium border border-white/20">
                     {category.count} محصول
                   </Badge>
                 </CardContent>
