@@ -4,7 +4,7 @@ import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Filter } from 'lucide-react';
+import { Filter, ChevronLeft, ChevronRight } from 'lucide-react';
 import scarf1 from '@/assets/scarf1.jpg';
 import scarf2 from '@/assets/scarf2.jpg';
 import hijab1 from '@/assets/hijab1.jpg';
@@ -40,14 +40,22 @@ const products = [
 const Products = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
-  const [visibleProducts, setVisibleProducts] = useState(6);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
 
   const filteredProducts = products.filter(product => 
     selectedCategory === 'all' || product.category === selectedCategory
   );
 
-  const loadMore = () => {
-    setVisibleProducts(prev => prev + 6);
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const currentProducts = filteredProducts.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const goToPage = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -73,12 +81,12 @@ const Products = () => {
               <SelectTrigger className="w-48 text-right">
                 <SelectValue placeholder="دسته‌بندی" />
               </SelectTrigger>
-              <SelectContent className="text-right">
-                <SelectItem value="all">همه محصولات</SelectItem>
-                <SelectItem value="scarves">شال</SelectItem>
-                <SelectItem value="hijabs">روسری</SelectItem>
-                <SelectItem value="mantuas">مانتو</SelectItem>
-                <SelectItem value="bags">کیف</SelectItem>
+              <SelectContent className="text-right" align="end">
+                <SelectItem value="all" className="text-right">همه محصولات</SelectItem>
+                <SelectItem value="scarves" className="text-right">شال</SelectItem>
+                <SelectItem value="hijabs" className="text-right">روسری</SelectItem>
+                <SelectItem value="mantuas" className="text-right">مانتو</SelectItem>
+                <SelectItem value="bags" className="text-right">کیف</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -87,18 +95,18 @@ const Products = () => {
             <SelectTrigger className="w-48 text-right">
               <SelectValue placeholder="مرتب‌سازی" />
             </SelectTrigger>
-            <SelectContent className="text-right">
-              <SelectItem value="newest">جدیدترین</SelectItem>
-              <SelectItem value="price-low">قیمت (کم به زیاد)</SelectItem>
-              <SelectItem value="price-high">قیمت (زیاد به کم)</SelectItem>
-              <SelectItem value="popular">محبوب‌ترین</SelectItem>
+            <SelectContent className="text-right" align="end">
+              <SelectItem value="newest" className="text-right">جدیدترین</SelectItem>
+              <SelectItem value="price-low" className="text-right">قیمت (کم به زیاد)</SelectItem>
+              <SelectItem value="price-high" className="text-right">قیمت (زیاد به کم)</SelectItem>
+              <SelectItem value="popular" className="text-right">محبوب‌ترین</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredProducts.slice(0, visibleProducts).map((product) => (
+          {currentProducts.map((product) => (
             <ProductCard
               key={product.id}
               id={product.id.toString()}
@@ -110,11 +118,38 @@ const Products = () => {
           ))}
         </div>
 
-        {/* Load More */}
-        {visibleProducts < filteredProducts.length && (
-          <div className="text-center mt-12">
-            <Button variant="outline" size="lg" onClick={loadMore}>
-              نمایش بیشتر
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center gap-2 mt-12">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => goToPage(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              <ChevronRight className="w-4 h-4" />
+              قبلی
+            </Button>
+            
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <Button
+                key={page}
+                variant={currentPage === page ? "default" : "outline"}
+                size="sm"
+                onClick={() => goToPage(page)}
+              >
+                {page}
+              </Button>
+            ))}
+            
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => goToPage(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              بعدی
+              <ChevronLeft className="w-4 h-4" />
             </Button>
           </div>
         )}

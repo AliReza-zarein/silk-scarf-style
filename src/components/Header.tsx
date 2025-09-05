@@ -1,14 +1,27 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { User, Search, Menu, X, ChevronDown } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Cart from './Cart';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+      setIsSearchOpen(false);
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 glass-effect shadow-soft">
@@ -86,14 +99,28 @@ const Header = () => {
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-reverse space-x-4">
-            <Button variant="ghost" size="icon" onClick={() => {
-              const searchTerm = prompt('جستجو کنید:');
-              if (searchTerm) {
-                window.location.href = `/products?search=${encodeURIComponent(searchTerm)}`;
-              }
-            }}>
-              <Search className="w-5 h-5" />
-            </Button>
+            {isSearchOpen ? (
+              <form onSubmit={handleSearch} className="flex items-center gap-2">
+                <Input
+                  type="text"
+                  placeholder="جستجو..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-48"
+                  autoFocus
+                />
+                <Button type="submit" size="sm">
+                  <Search className="w-4 h-4" />
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => setIsSearchOpen(false)}>
+                  <X className="w-4 h-4" />
+                </Button>
+              </form>
+            ) : (
+              <Button variant="ghost" size="icon" onClick={() => setIsSearchOpen(true)}>
+                <Search className="w-5 h-5" />
+              </Button>
+            )}
             <Link to="/login">
               <Button variant="ghost" size="icon">
                 <User className="w-5 h-5" />

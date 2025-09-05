@@ -21,9 +21,9 @@ const Payment = () => {
     const price = parseInt(item.price.replace(/,/g, ''));
     return sum + (price * item.quantity);
   }, 0);
-  const shippingCost = shippingMethod === 'express' ? 25000 : subtotal > 200000 ? 0 : 15000;
-  const discount = 50000; // تخفیف ثابت
-  const total = subtotal + shippingCost - discount;
+  const shippingCost = cartItems.length === 0 ? 0 : (shippingMethod === 'express' ? 25000 : subtotal > 200000 ? 0 : 15000);
+  const discount = cartItems.length === 0 ? 0 : 50000; // تخفیف ثابت
+  const total = Math.max(0, subtotal + shippingCost - discount);
 
   return (
     <div className="min-h-screen bg-background">
@@ -31,13 +31,21 @@ const Payment = () => {
       
       {/* Breadcrumb */}
       <div className="container mx-auto px-4 py-6">
-        <nav className="flex items-center space-x-reverse space-x-2 text-sm text-muted-foreground">
-          <Link to="/" className="hover:text-primary">خانه</Link>
-          <span>/</span>
-          <Link to="/cart" className="hover:text-primary">سبد خرید</Link>
-          <span>/</span>
-          <span className="text-foreground">پرداخت</span>
-        </nav>
+        <div className="flex items-center justify-between">
+          <nav className="flex items-center space-x-reverse space-x-2 text-sm text-muted-foreground">
+            <Link to="/" className="hover:text-primary">خانه</Link>
+            <span>/</span>
+            <Link to="/cart" className="hover:text-primary">سبد خرید</Link>
+            <span>/</span>
+            <span className="text-foreground">پرداخت</span>
+          </nav>
+          <Link to="/cart">
+            <Button variant="outline" className="group">
+              <ArrowRight className="w-4 h-4 ml-2" />
+              بازگشت به سبد خرید
+            </Button>
+          </Link>
+        </div>
       </div>
 
       <div className="container mx-auto px-4 pb-16">
@@ -282,11 +290,21 @@ const Payment = () => {
                 <Button 
                   size="lg" 
                   className="w-full bg-gradient-primary text-primary-foreground shadow-glow"
+                  disabled={cartItems.length === 0}
                 >
-                  پرداخت و تکمیل سفارش
+                  {cartItems.length === 0 ? 'سبد خرید خالی است' : 'پرداخت و تکمیل سفارش'}
                 </Button>
 
-                <Cart />
+                {/* Invoice Generator */}
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  className="w-full"
+                  onClick={() => window.print()}
+                  disabled={cartItems.length === 0}
+                >
+                  چاپ فاکتور
+                </Button>
               </CardContent>
             </Card>
 

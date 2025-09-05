@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import ProductCard from '@/components/ProductCard';
 import Footer from '@/components/Footer';
-import { Truck, Shield, Headphones, ArrowLeft } from 'lucide-react';
+import { Truck, Shield, Headphones, ArrowLeft, Grid, List } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 import scarf1 from '@/assets/scarf1.jpg';
@@ -15,6 +16,7 @@ import scarf2 from '@/assets/scarf2.jpg';
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [viewMode, setViewMode] = useState('grid');
 
   const featuredProducts = [
     {
@@ -45,7 +47,7 @@ const Home = () => {
     { name: 'شال‌های ابریشمی', count: 45, color: 'bg-gradient-primary' },
     { name: 'روسری‌های گلدار', count: 32, color: 'bg-gradient-accent' },
     { name: 'شال‌های کشمیر', count: 28, color: 'bg-gradient-hero' },
-    { name: 'روسری‌های ساده', count: 56, color: 'bg-gradient-card' }
+    { name: 'روسری‌های ساده', count: 56, color: 'bg-gradient-primary' }
   ];
 
   const features = [
@@ -110,7 +112,7 @@ const Home = () => {
               <Card key={index} className={`${category.color} border-0 hover-lift cursor-pointer group`}>
                 <CardContent className="p-6 text-center">
                   <h3 className="font-semibold text-lg mb-2 text-white drop-shadow-lg">{category.name}</h3>
-                  <Badge variant="secondary" className="bg-black/80 text-white font-medium border border-white/20">
+                  <Badge variant="secondary" className="bg-white/20 text-white font-medium border border-white/30 backdrop-blur-sm">
                     {category.count} محصول
                   </Badge>
                 </CardContent>
@@ -128,21 +130,81 @@ const Home = () => {
               <h2 className="text-4xl font-bold mb-4 gradient-text">محصولات ویژه</h2>
               <p className="text-xl text-muted-foreground">برترین انتخاب‌های هفته</p>
             </div>
-            <Link to="/products">
-              <Button variant="outline" className="group">
-                مشاهده همه
-                <ArrowLeft className="w-4 h-4 mr-2 group-hover:transform group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </Link>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Button
+                  variant={viewMode === 'grid' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setViewMode('grid')}
+                >
+                  <Grid className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant={viewMode === 'list' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setViewMode('list')}
+                >
+                  <List className="w-4 h-4" />
+                </Button>
+              </div>
+              <Link to="/products">
+                <Button variant="outline" className="group">
+                  مشاهده همه
+                  <ArrowLeft className="w-4 h-4 mr-2 group-hover:transform group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredProducts.map((product, index) => (
-              <div key={product.id} className="animate-slide-up" style={{animationDelay: `${index * 0.2}s`}}>
-                <ProductCard {...product} />
-              </div>
-            ))}
-          </div>
+          {viewMode === 'grid' ? (
+            <Carousel className="w-full" opts={{ align: "start", loop: true }}>
+              <CarouselContent>
+                {featuredProducts.map((product, index) => (
+                  <CarouselItem key={product.id} className="md:basis-1/2 lg:basis-1/3">
+                    <div className="p-1">
+                      <ProductCard {...product} />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+          ) : (
+            <div className="space-y-4">
+              {featuredProducts.map((product, index) => (
+                <Card key={product.id} className="bg-gradient-card border-0 shadow-soft hover-lift">
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-6">
+                      <img 
+                        src={product.image} 
+                        alt={product.name}
+                        className="w-24 h-24 object-cover rounded-lg"
+                      />
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          {product.isNew && <Badge className="bg-green-500 text-white">جدید</Badge>}
+                          {product.isSale && <Badge className="bg-red-500 text-white">تخفیف</Badge>}
+                        </div>
+                        <h3 className="font-semibold text-lg mb-2">{product.name}</h3>
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-primary text-lg">{product.price} تومان</span>
+                          {product.originalPrice && (
+                            <span className="text-sm text-muted-foreground line-through">
+                              {product.originalPrice} تومان
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <Link to={`/product/${product.id}`}>
+                        <Button variant="outline">مشاهده</Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

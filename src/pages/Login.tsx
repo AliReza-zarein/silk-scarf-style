@@ -7,16 +7,31 @@ import { Separator } from '@/components/ui/separator';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Eye, EyeOff, Mail, Lock, User, Phone } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const navigate = useNavigate();
 
   const toggleMode = () => setIsLogin(!isLogin);
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (isLogin) {
+      toast.success('با موفقیت وارد شدید');
+      navigate('/');
+    } else {
+      toast.success('ثبت نام با موفقیت انجام شد');
+      // Create a simple user dashboard redirect
+      navigate('/dashboard');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -41,7 +56,7 @@ const Login = () => {
             </CardHeader>
 
             <CardContent className="space-y-6">
-              <form className="space-y-4">
+              <form className="space-y-4" onSubmit={handleSubmit}>
                 {!isLogin && (
                   <div className="space-y-2">
                     <Label htmlFor="name">نام و نام خانوادگی</Label>
