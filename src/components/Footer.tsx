@@ -1,13 +1,13 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Instagram, Phone, Mail, MapPin } from 'lucide-react';
+import { Instagram, Phone, Mail, MapPin, Send, MessageCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
     <footer className="bg-gradient-to-b from-primary to-primary/90 text-primary-foreground">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+      <div className="container mx-auto px-4 py-8 md:py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-8">
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
@@ -19,22 +19,22 @@ const Footer = () => {
             <p className="text-primary-foreground/80 leading-relaxed">
               فروشگاه آنلاین شال و روسری با بهترین کیفیت و قیمت مناسب
             </p>
-            <div className="flex space-x-reverse space-x-4">
-              <Button variant="ghost" size="icon" className="text-primary-foreground hover:text-accent">
-                <Instagram className="w-5 h-5" />
+            <div className="flex space-x-reverse space-x-2 md:space-x-4">
+              <Button variant="ghost" size="sm" className="text-primary-foreground hover:bg-accent/20 hover:text-accent p-2">
+                <Instagram className="w-4 h-4 md:w-5 md:h-5" />
               </Button>
-              <Button variant="ghost" size="icon" className="text-primary-foreground hover:text-accent">
-                <Phone className="w-5 h-5" />
+              <Button variant="ghost" size="sm" className="text-primary-foreground hover:bg-accent/20 hover:text-accent p-2">
+                <Send className="w-4 h-4 md:w-5 md:h-5" />
               </Button>
-              <Button variant="ghost" size="icon" className="text-primary-foreground hover:text-accent">
-                <Mail className="w-5 h-5" />
+              <Button variant="ghost" size="sm" className="text-primary-foreground hover:bg-accent/20 hover:text-accent p-2">
+                <MessageCircle className="w-4 h-4 md:w-5 md:h-5" />
               </Button>
             </div>
           </div>
 
           {/* Quick Links */}
-          <div className="space-y-4">
-            <h3 className="font-semibold text-lg text-accent">دسترسی سریع</h3>
+          <div className="space-y-2 md:space-y-4">
+            <h3 className="font-semibold text-base md:text-lg text-accent">دسترسی سریع</h3>
             <nav className="flex flex-col space-y-2">
               <Link to="/" className="text-primary-foreground/80 hover:text-accent transition-colors">
                 خانه
@@ -52,8 +52,8 @@ const Footer = () => {
           </div>
 
           {/* Categories */}
-          <div className="space-y-4">
-            <h3 className="font-semibold text-lg text-accent">دسته‌بندی</h3>
+          <div className="space-y-2 md:space-y-4">
+            <h3 className="font-semibold text-base md:text-lg text-accent">دسته‌بندی</h3>
             <nav className="flex flex-col space-y-2">
               <Link to="/category/scarves" className="text-primary-foreground/80 hover:text-accent transition-colors">
                 شال
@@ -74,8 +74,8 @@ const Footer = () => {
           </div>
 
           {/* Contact Info */}
-          <div className="space-y-4">
-            <h3 className="font-semibold text-lg text-accent">تماس با ما</h3>
+          <div className="space-y-2 md:space-y-4">
+            <h3 className="font-semibold text-base md:text-lg text-accent">تماس با ما</h3>
             <div className="space-y-3">
               <div className="flex items-center space-x-reverse space-x-3">
                 <Phone className="w-5 h-5 text-accent" />
@@ -95,8 +95,8 @@ const Footer = () => {
           </div>
 
           {/* Newsletter */}
-          <div className="space-y-4">
-            <h3 className="font-semibold text-lg text-accent">خبرنامه</h3>
+          <div className="space-y-2 md:space-y-4">
+            <h3 className="font-semibold text-base md:text-lg text-accent">خبرنامه</h3>
             <p className="text-primary-foreground/80 text-sm">
               از آخرین محصولات و تخفیف‌ها باخبر شوید
             </p>
@@ -107,6 +107,7 @@ const Footer = () => {
                 className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/60"
               />
               <Button 
+                size="sm"
                 className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
               >
                 عضویت

@@ -3,12 +3,15 @@ import { useParams } from 'react-router-dom';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { Heart, ShoppingCart, Minus, Plus, Star, Truck, Shield, ArrowLeft } from 'lucide-react';
+import { Heart, ShoppingCart, Minus, Plus, Star, Truck, Shield, ArrowLeft, MessageSquare, ThumbsUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 import scarf1 from '@/assets/scarf1.jpg';
@@ -22,6 +25,9 @@ const ProductDetails = () => {
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState('متوسط');
   const [activeImage, setActiveImage] = useState(0);
+  const [newRating, setNewRating] = useState(0);
+  const [newComment, setNewComment] = useState('');
+  const [userName, setUserName] = useState('');
 
   // Mock product data - در حالت واقعی از API دریافت می‌شود
   const product = {
@@ -61,6 +67,33 @@ const ProductDetails = () => {
     }
   ];
 
+  const [comments, setComments] = useState([
+    {
+      id: 1,
+      userName: 'مریم احمدی',
+      rating: 5,
+      comment: 'کیفیت عالی و ارسال سریع. توصیه می‌کنم.',
+      date: '1403/08/15',
+      likes: 12
+    },
+    {
+      id: 2,
+      userName: 'زهرا محمدی',
+      rating: 4,
+      comment: 'شال زیبایی است ولی اندازه کمی کوچک‌تر از انتظار بود.',
+      date: '1403/08/10',
+      likes: 8
+    },
+    {
+      id: 3,
+      userName: 'فاطمه حسینی',
+      rating: 5,
+      comment: 'بسیار راضی هستم. رنگ و کیفیت عالی.',
+      date: '1403/08/05',
+      likes: 15
+    }
+  ]);
+
   const increaseQuantity = () => setQuantity(prev => prev + 1);
   const decreaseQuantity = () => setQuantity(prev => prev > 1 ? prev - 1 : 1);
 
@@ -88,6 +121,23 @@ const ProductDetails = () => {
       removeFromWishlist(product.id);
     } else {
       addToWishlist(wishlistItem);
+    }
+  };
+
+  const handleSubmitComment = () => {
+    if (newComment.trim() && userName.trim() && newRating > 0) {
+      const comment = {
+        id: comments.length + 1,
+        userName: userName,
+        rating: newRating,
+        comment: newComment,
+        date: new Date().toLocaleDateString('fa-IR'),
+        likes: 0
+      };
+      setComments([comment, ...comments]);
+      setNewComment('');
+      setUserName('');
+      setNewRating(0);
     }
   };
 
@@ -256,8 +306,105 @@ const ProductDetails = () => {
           </div>
         </div>
 
+        {/* Comments and Reviews Section */}
+        <section className="mt-16 text-right">
+          <h2 className="text-2xl font-bold mb-8">نظرات و امتیازات</h2>
+          
+          {/* Add Comment Form */}
+          <Card className="mb-8 bg-gradient-card border-0 shadow-soft">
+            <CardHeader>
+              <CardTitle className="text-right">ثبت نظر جدید</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2 text-right">نام شما</label>
+                <Input 
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                  placeholder="نام خود را وارد کنید"
+                  className="text-right"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-2 text-right">امتیاز شما</label>
+                <div className="flex items-center gap-1 justify-end">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      onClick={() => setNewRating(star)}
+                      className="p-1"
+                    >
+                      <Star 
+                        className={`w-6 h-6 ${star <= newRating ? 'fill-accent text-accent' : 'text-muted-foreground'} hover:text-accent transition-colors`} 
+                      />
+                    </button>
+                  ))}
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-2 text-right">نظر شما</label>
+                <Textarea 
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  placeholder="نظر خود را در مورد این محصول بنویسید..."
+                  className="min-h-24 text-right"
+                />
+              </div>
+              
+              <Button onClick={handleSubmitComment} className="w-full">
+                ثبت نظر
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Comments List */}
+          <div className="space-y-6">
+            {comments.map((comment) => (
+              <Card key={comment.id} className="bg-gradient-card border-0 shadow-soft">
+                <CardContent className="p-6">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <Avatar className="w-10 h-10">
+                        <AvatarFallback className="bg-primary/20 text-primary">
+                          {comment.userName.charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <h4 className="font-semibold">{comment.userName}</h4>
+                        <span className="text-sm text-muted-foreground">{comment.date}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-1">
+                      {[...Array(5)].map((_, i) => (
+                        <Star 
+                          key={i} 
+                          className={`w-4 h-4 ${i < comment.rating ? 'fill-accent text-accent' : 'text-muted-foreground'}`} 
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <p className="text-muted-foreground mb-4 text-right leading-relaxed">
+                    {comment.comment}
+                  </p>
+                  
+                  <div className="flex items-center justify-end gap-2">
+                    <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-primary">
+                      <ThumbsUp className="w-4 h-4 ml-1" />
+                      {comment.likes}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </section>
+
         {/* Related Products */}
-        <section className="mt-16">
+        <section className="mt-16 text-right">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-2xl font-bold">محصولات مشابه</h2>
             <Link to="/products">

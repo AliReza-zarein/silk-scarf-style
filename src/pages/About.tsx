@@ -7,7 +7,7 @@ const About = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8 text-right">
         {/* Hero Section */}
         <div className="text-center mb-16">
           <h1 className="text-4xl font-bold gradient-text mb-6">درباره شال زیبا</h1>

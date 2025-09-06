@@ -71,12 +71,8 @@ const Products = () => {
         </div>
 
         {/* Filters */}
-        <div className="flex flex-col md:flex-row gap-4 mb-8 items-center justify-between">
+        <div className="flex flex-col md:flex-row gap-4 mb-8 items-center justify-between text-right">
           <div className="flex items-center gap-4">
-            <Button variant="outline" size="sm">
-              <Filter className="w-4 h-4 mr-2" />
-              فیلتر
-            </Button>
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
               <SelectTrigger className="w-48 text-right">
                 <SelectValue placeholder="دسته‌بندی" />

@@ -26,7 +26,7 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-50 glass-effect shadow-soft">
       <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-center lg:justify-between">
+        <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <div className="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center">
@@ -133,7 +133,7 @@ const Header = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden"
+            className="md:hidden order-1 lg:order-none"
             onClick={toggleMenu}
           >
             {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
