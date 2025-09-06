@@ -69,6 +69,10 @@ const Home = () => {
   ];
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % featuredProducts.length);
     }, 5000);
@@ -173,38 +177,45 @@ const Home = () => {
               </Carousel>
             </div>
           ) : (
-            <div className="space-y-4 text-right">
-              {featuredProducts.map((product, index) => (
-                <Link key={product.id} to={`/product/${product.id}`}>
-                  <Card className="bg-gradient-card border-0 shadow-soft hover-lift cursor-pointer">
-                    <CardContent className="p-6">
-                      <div className="flex items-center gap-6 text-right">
-                        <img 
-                          src={product.image} 
-                          alt={product.name}
-                          className="w-20 h-20 md:w-24 md:h-24 object-cover rounded-lg flex-shrink-0"
-                        />
-                        <div className="flex-1 text-right">
-                          <div className="flex items-center justify-end gap-2 mb-2">
-                            {product.isSale && <Badge className="bg-red-500 text-white">تخفیف</Badge>}
-                            {product.isNew && <Badge className="bg-green-500 text-white">جدید</Badge>}
-                          </div>
-                          <h3 className="font-semibold text-lg mb-2 text-right">{product.name}</h3>
-                          <div className="flex items-center justify-end gap-2">
-                            {product.originalPrice && (
-                              <span className="text-sm text-muted-foreground line-through">
-                                {product.originalPrice} تومان
-                              </span>
-                            )}
-                            <span className="font-bold text-primary text-lg">{product.price} تومان</span>
+          <div className="space-y-4 text-right">
+            {featuredProducts.map((product, index) => (
+              <Link key={product.id} to={`/product/${product.id}`}>
+                <Card className="bg-gradient-card border-0 shadow-soft hover-lift cursor-pointer">
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-6 text-right">
+                      <img 
+                        src={product.image} 
+                        alt={product.name}
+                        className="w-20 h-20 md:w-24 md:h-24 object-cover rounded-lg flex-shrink-0"
+                      />
+                      <div className="flex-1 text-right">
+                        <div className="flex items-center justify-end gap-2 mb-2">
+                          {product.isSale && <Badge className="bg-red-500 text-white">تخفیف</Badge>}
+                          {product.isNew && <Badge className="bg-green-500 text-white">جدید</Badge>}
+                        </div>
+                        <h3 className="font-semibold text-lg mb-2 text-right">{product.name}</h3>
+                        <div className="hidden md:block mb-3">
+                          <div className="flex flex-wrap gap-2 justify-end">
+                            <Badge variant="secondary" className="text-xs">جنس: ابریشم طبیعی</Badge>
+                            <Badge variant="secondary" className="text-xs">ابعاد: 180x70 سانتی‌متر</Badge>
+                            <Badge variant="secondary" className="text-xs">قابل شستشو</Badge>
                           </div>
                         </div>
+                        <div className="flex items-center justify-end gap-2">
+                          {product.originalPrice && (
+                            <span className="text-sm text-muted-foreground line-through">
+                              {product.originalPrice} تومان
+                            </span>
+                          )}
+                          <span className="font-bold text-primary text-lg">{product.price} تومان</span>
+                        </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
-            </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
           )}
         </div>
       </section>

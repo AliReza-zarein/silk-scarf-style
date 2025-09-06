@@ -13,6 +13,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Heart, ShoppingCart, Minus, Plus, Star, Truck, Shield, ArrowLeft, MessageSquare, ThumbsUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 
 import scarf1 from '@/assets/scarf1.jpg';
 import hijab1 from '@/assets/hijab1.jpg';
@@ -27,7 +28,11 @@ const ProductDetails = () => {
   const [activeImage, setActiveImage] = useState(0);
   const [newRating, setNewRating] = useState(0);
   const [newComment, setNewComment] = useState('');
-  const [userName, setUserName] = useState('');
+  const [showFAQ, setShowFAQ] = useState(false);
+  
+  // فرض می‌کنیم کاربر لاگین کرده (در حالت واقعی از context احراز هویت استفاده می‌شود)
+  const isLoggedIn = true; // این باید از context احراز هویت آمده باشد
+  const currentUserName = 'کاربر فعال'; // این باید از context کاربر آمده باشد
 
   // Mock product data - در حالت واقعی از API دریافت می‌شود
   const product = {
@@ -94,6 +99,11 @@ const ProductDetails = () => {
     }
   ]);
 
+  // اسکرول به بالای صفحه در موبایل
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const increaseQuantity = () => setQuantity(prev => prev + 1);
   const decreaseQuantity = () => setQuantity(prev => prev > 1 ? prev - 1 : 1);
 
@@ -125,10 +135,10 @@ const ProductDetails = () => {
   };
 
   const handleSubmitComment = () => {
-    if (newComment.trim() && userName.trim() && newRating > 0) {
+    if (newComment.trim() && newRating > 0 && isLoggedIn) {
       const comment = {
         id: comments.length + 1,
-        userName: userName,
+        userName: currentUserName,
         rating: newRating,
         comment: newComment,
         date: new Date().toLocaleDateString('fa-IR'),
@@ -136,10 +146,28 @@ const ProductDetails = () => {
       };
       setComments([comment, ...comments]);
       setNewComment('');
-      setUserName('');
       setNewRating(0);
     }
   };
+
+  const faqData = [
+    {
+      question: 'چگونه سایز مناسب خود را انتخاب کنم؟',
+      answer: 'برای انتخاب سایز مناسب، می‌توانید از راهنمای سایزبندی استفاده کنید. اگر بین دو سایز مردد هستید، سایز بزرگ‌تر را انتخاب کنید.'
+    },
+    {
+      question: 'آیا امکان تعویض محصول وجود دارد؟',
+      answer: 'بله، تا 7 روز پس از خرید امکان تعویض محصول وجود دارد. محصول باید در حالت اولیه و دست‌نخورده باشد.'
+    },
+    {
+      question: 'چقدر طول می‌کشد تا محصول ارسال شود؟',
+      answer: 'معمولاً ظرف 2 تا 3 روز کاری محصول ارسال می‌شود. برای شهرستان‌ها ممکن است تا 5 روز طول بکشد.'
+    },
+    {
+      question: 'آیا این محصول قابل شستشو است؟',
+      answer: 'بله، این محصول از جنس ابریشم طبیعی بوده و با دستورالعمل‌های مراقبت مناسب قابل شستشو است.'
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -316,46 +344,47 @@ const ProductDetails = () => {
               <CardTitle className="text-right">ثبت نظر جدید</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-2 text-right">نام شما</label>
-                <Input 
-                  value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
-                  placeholder="نام خود را وارد کنید"
-                  className="text-right"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium mb-2 text-right">امتیاز شما</label>
-                <div className="flex items-center gap-1 justify-end">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      onClick={() => setNewRating(star)}
-                      className="p-1"
-                    >
-                      <Star 
-                        className={`w-6 h-6 ${star <= newRating ? 'fill-accent text-accent' : 'text-muted-foreground'} hover:text-accent transition-colors`} 
-                      />
-                    </button>
-                  ))}
+              {!isLoggedIn ? (
+                <div className="text-center p-6">
+                  <p className="text-muted-foreground mb-4">برای ثبت نظر باید وارد حساب کاربری خود شوید</p>
+                  <Link to="/login">
+                    <Button>ورود به حساب کاربری</Button>
+                  </Link>
                 </div>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium mb-2 text-right">نظر شما</label>
-                <Textarea 
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                  placeholder="نظر خود را در مورد این محصول بنویسید..."
-                  className="min-h-24 text-right"
-                />
-              </div>
-              
-              <Button onClick={handleSubmitComment} className="w-full">
-                ثبت نظر
-              </Button>
+              ) : (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium mb-2 text-right">امتیاز شما</label>
+                    <div className="flex items-center gap-1 justify-end">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          key={star}
+                          onClick={() => setNewRating(star)}
+                          className="p-1"
+                        >
+                          <Star 
+                            className={`w-6 h-6 ${star <= newRating ? 'fill-accent text-accent' : 'text-muted-foreground'} hover:text-accent transition-colors`} 
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-2 text-right">نظر شما</label>
+                    <Textarea 
+                      value={newComment}
+                      onChange={(e) => setNewComment(e.target.value)}
+                      placeholder="نظر خود را در مورد این محصول بنویسید..."
+                      className="min-h-24 text-right"
+                    />
+                  </div>
+                  
+                  <Button onClick={handleSubmitComment} className="w-full">
+                    ثبت نظر
+                  </Button>
+                </>
+              )}
             </CardContent>
           </Card>
 
@@ -401,6 +430,34 @@ const ProductDetails = () => {
               </Card>
             ))}
           </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="mt-16 text-right">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl font-bold">پرسش‌های متداول</h2>
+            <Button 
+              variant="outline" 
+              onClick={() => setShowFAQ(!showFAQ)}
+              className="flex items-center gap-2"
+            >
+              <MessageSquare className="w-4 h-4" />
+              {showFAQ ? 'مخفی کردن' : 'نمایش سوالات'}
+            </Button>
+          </div>
+          
+          {showFAQ && (
+            <div className="space-y-4">
+              {faqData.map((faq, index) => (
+                <Card key={index} className="bg-gradient-card border-0 shadow-soft">
+                  <CardContent className="p-6">
+                    <h3 className="font-semibold text-lg mb-3 text-right">{faq.question}</h3>
+                    <p className="text-muted-foreground text-right leading-relaxed">{faq.answer}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </section>
 
         {/* Related Products */}

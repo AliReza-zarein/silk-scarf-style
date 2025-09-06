@@ -1,10 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Filter, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Filter, ChevronLeft, ChevronRight, Grid, List, ShoppingCart } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useCart } from '@/context/CartContext';
 import scarf1 from '@/assets/scarf1.jpg';
 import scarf2 from '@/assets/scarf2.jpg';
 import hijab1 from '@/assets/hijab1.jpg';
@@ -16,7 +20,8 @@ const products = [
     price: '۲۵۰,۰۰۰',
     originalPrice: '۳۰۰,۰۰۰',
     image: scarf1,
-    category: 'scarves'
+    category: 'scarves',
+    features: ['جنس: ابریشم طبیعی', 'ابعاد: 180x70 سانتی‌متر', 'قابل شستشو']
   },
   {
     id: 2,
@@ -24,7 +29,8 @@ const products = [
     price: '۱۵۰,۰۰۰',
     originalPrice: '۲۰۰,۰۰۰',
     image: hijab1,
-    category: 'hijabs'
+    category: 'hijabs',
+    features: ['جنس: نخ', 'ابعاد: 110x110 سانتی‌متر', 'ضدحساسیت']
   },
   {
     id: 3,
@@ -32,7 +38,8 @@ const products = [
     price: '۳۰۰,۰۰۰',
     originalPrice: '۳۵۰,۰۰۰',
     image: scarf2,
-    category: 'scarves'
+    category: 'scarves',
+    features: ['جنس: کشمیر', 'ابعاد: 200x80 سانتی‌متر', 'گرم و نرم']
   },
   // Add more products...
 ];
@@ -41,7 +48,14 @@ const Products = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
   const [currentPage, setCurrentPage] = useState(1);
+  const [viewMode, setViewMode] = useState('grid');
+  const { addToCart } = useCart();
   const itemsPerPage = 8;
+
+  // اسکرول به بالای صفحه
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const filteredProducts = products.filter(product => 
     selectedCategory === 'all' || product.category === selectedCategory
@@ -73,6 +87,22 @@ const Products = () => {
         {/* Filters */}
         <div className="flex flex-col md:flex-row gap-4 mb-8 items-center justify-between text-right">
           <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <Button
+                variant={viewMode === 'grid' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setViewMode('grid')}
+              >
+                <Grid className="w-4 h-4" />
+              </Button>
+              <Button
+                variant={viewMode === 'list' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setViewMode('list')}
+              >
+                <List className="w-4 h-4" />
+              </Button>
+            </div>
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
               <SelectTrigger className="w-48 text-right">
                 <SelectValue placeholder="دسته‌بندی" />
@@ -100,19 +130,77 @@ const Products = () => {
           </Select>
         </div>
 
-        {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {currentProducts.map((product) => (
-            <ProductCard
-              key={product.id}
-              id={product.id.toString()}
-              name={product.name}
-              price={product.price}
-              originalPrice={product.originalPrice}
-              image={product.image}
-            />
-          ))}
-        </div>
+        {/* Products Grid/List */}
+        {viewMode === 'grid' ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {currentProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                id={product.id.toString()}
+                name={product.name}
+                price={product.price}
+                originalPrice={product.originalPrice}
+                image={product.image}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="space-y-4 text-right">
+            {currentProducts.map((product) => (
+              <Link key={product.id} to={`/product/${product.id}`}>
+                <Card className="bg-gradient-card border-0 shadow-soft hover-lift cursor-pointer">
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-6 text-right">
+                      <img 
+                        src={product.image} 
+                        alt={product.name}
+                        className="w-24 h-24 object-cover rounded-lg flex-shrink-0"
+                      />
+                      <div className="flex-1 text-right">
+                        <h3 className="font-semibold text-lg mb-2 text-right">{product.name}</h3>
+                        <div className="hidden md:block mb-3">
+                          <div className="flex flex-wrap gap-2 justify-end">
+                            {product.features.map((feature, index) => (
+                              <Badge key={index} variant="secondary" className="text-xs">
+                                {feature}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <Button
+                            size="sm"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              addToCart({
+                                id: product.id.toString(),
+                                name: product.name,
+                                price: product.price,
+                                image: product.image
+                              });
+                            }}
+                            className="flex items-center gap-2"
+                          >
+                            <ShoppingCart className="w-4 h-4" />
+                            افزودن به سبد
+                          </Button>
+                          <div className="flex items-center gap-2">
+                            {product.originalPrice && (
+                              <span className="text-sm text-muted-foreground line-through">
+                                {product.originalPrice} تومان
+                              </span>
+                            )}
+                            <span className="font-bold text-primary text-lg">{product.price} تومان</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        )}
 
         {/* Pagination */}
         {totalPages > 1 && (
