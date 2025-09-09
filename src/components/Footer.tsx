@@ -28,7 +28,8 @@ const Footer = () => {
               </Button>
               <Button variant="ghost" size="sm" className="text-primary-foreground hover:bg-accent/20 hover:text-accent p-2">
                 <svg className="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                  <path d="M12 1L3 9v11c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V9l-9-8zM12 3.69L18 9v11H6V9l6-5.31z"/>
+                  <path d="M8 11h8v2H8v-2zm0 4h8v2H8v-2z"/>
                 </svg>
               </Button>
             </div>

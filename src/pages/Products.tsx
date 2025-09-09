@@ -85,7 +85,7 @@ const Products = () => {
         </div>
 
         {/* Filters */}
-        <div className="flex flex-col md:flex-row gap-4 mb-8 items-center justify-between text-right">
+        <div className="flex flex-col md:flex-row gap-4 mb-8 items-start md:items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <Button
@@ -103,8 +103,11 @@ const Products = () => {
                 <List className="w-4 h-4" />
               </Button>
             </div>
+          </div>
+          
+          <div className="flex gap-4 w-full md:w-auto">
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="w-48 text-right">
+              <SelectTrigger className="w-full md:w-48 text-right">
                 <SelectValue placeholder="دسته‌بندی" />
               </SelectTrigger>
               <SelectContent className="text-right" align="end">
@@ -115,19 +118,19 @@ const Products = () => {
                 <SelectItem value="bags" className="text-right">کیف</SelectItem>
               </SelectContent>
             </Select>
+            
+            <Select value={sortBy} onValueChange={setSortBy}>
+              <SelectTrigger className="w-full md:w-48 text-right">
+                <SelectValue placeholder="مرتب‌سازی" />
+              </SelectTrigger>
+              <SelectContent className="text-right" align="end">
+                <SelectItem value="newest" className="text-right">جدیدترین</SelectItem>
+                <SelectItem value="price-low" className="text-right">قیمت (کم به زیاد)</SelectItem>
+                <SelectItem value="price-high" className="text-right">قیمت (زیاد به کم)</SelectItem>
+                <SelectItem value="popular" className="text-right">محبوب‌ترین</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-          
-          <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="w-48 text-right">
-              <SelectValue placeholder="مرتب‌سازی" />
-            </SelectTrigger>
-            <SelectContent className="text-right" align="end">
-              <SelectItem value="newest" className="text-right">جدیدترین</SelectItem>
-              <SelectItem value="price-low" className="text-right">قیمت (کم به زیاد)</SelectItem>
-              <SelectItem value="price-high" className="text-right">قیمت (زیاد به کم)</SelectItem>
-              <SelectItem value="popular" className="text-right">محبوب‌ترین</SelectItem>
-            </SelectContent>
-          </Select>
         </div>
 
         {/* Products Grid/List */}
@@ -179,10 +182,11 @@ const Products = () => {
                                 image: product.image
                               });
                             }}
-                            className="flex items-center gap-2"
+                            className="flex items-center gap-1 md:gap-2 text-xs md:text-sm px-2 md:px-4"
                           >
-                            <ShoppingCart className="w-4 h-4" />
-                            افزودن به سبد
+                            <ShoppingCart className="w-3 h-3 md:w-4 md:h-4" />
+                            <span className="hidden md:inline">افزودن به سبد</span>
+                            <span className="md:hidden">افزودن</span>
                           </Button>
                           <div className="flex items-center gap-2">
                             {product.originalPrice && (

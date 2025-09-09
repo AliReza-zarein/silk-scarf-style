@@ -7,7 +7,8 @@ import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import ProductCard from '@/components/ProductCard';
 import Footer from '@/components/Footer';
-import { Truck, Shield, Headphones, ArrowLeft, Grid, List } from 'lucide-react';
+import { Truck, Shield, Headphones, ArrowLeft, Grid, List, ChevronLeft, ChevronRight, ShoppingCart } from 'lucide-react';
+import { useCart } from '@/context/CartContext';
 import { Link } from 'react-router-dom';
 
 import scarf1 from '@/assets/scarf1.jpg';
@@ -17,6 +18,7 @@ import scarf2 from '@/assets/scarf2.jpg';
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [viewMode, setViewMode] = useState('grid');
+  const { addToCart } = useCart();
 
   const featuredProducts = [
     {
@@ -75,9 +77,9 @@ const Home = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % featuredProducts.length);
-    }, 5000);
+    }, 4000);
     return () => clearInterval(timer);
-  }, []);
+  }, [featuredProducts.length]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -129,39 +131,39 @@ const Home = () => {
       {/* Featured Products */}
       <section className="py-16 bg-secondary/30">
         <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center mb-12">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 md:mb-12 gap-4">
             <div className="animate-fade-in">
-              <h2 className="text-4xl font-bold mb-4 gradient-text">محصولات ویژه</h2>
-              <p className="text-xl text-muted-foreground">برترین انتخاب‌های هفته</p>
+              <h2 className="text-2xl md:text-4xl font-bold mb-2 md:mb-4 gradient-text">محصولات ویژه</h2>
+              <p className="text-lg md:text-xl text-muted-foreground">برترین انتخاب‌های هفته</p>
             </div>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 md:gap-4 w-full md:w-auto justify-between md:justify-end">
+              <div className="flex items-center gap-1 md:gap-2">
                 <Button
                   variant={viewMode === 'grid' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setViewMode('grid')}
                 >
-                  <Grid className="w-4 h-4" />
+                  <Grid className="w-3 h-3 md:w-4 md:h-4" />
                 </Button>
                 <Button
                   variant={viewMode === 'list' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setViewMode('list')}
                 >
-                  <List className="w-4 h-4" />
+                  <List className="w-3 h-3 md:w-4 md:h-4" />
                 </Button>
               </div>
               <Link to="/products">
-                <Button variant="outline" className="group">
+                <Button variant="outline" size="sm" className="group">
                   مشاهده همه
-                  <ArrowLeft className="w-4 h-4 mr-2 group-hover:transform group-hover:translate-x-1 transition-transform" />
+                  <ArrowLeft className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 group-hover:transform group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
             </div>
           </div>
 
           {viewMode === 'grid' ? (
-            <div className="text-center">
+            <div className="text-center relative">
               <Carousel className="w-full max-w-7xl mx-auto" opts={{ align: "center", loop: true }}>
                 <CarouselContent className="text-right">
                   {featuredProducts.map((product, index) => (
@@ -175,45 +177,80 @@ const Home = () => {
                 <CarouselPrevious className="left-auto right-12" />
                 <CarouselNext className="right-4" />
               </Carousel>
+              {/* Slide Indicators */}
+              <div className="flex justify-center gap-2 mt-6">
+                {featuredProducts.map((_, index) => (
+                  <button
+                    key={index}
+                    className={`w-2 h-2 rounded-full transition-colors ${
+                      index === currentSlide % featuredProducts.length 
+                        ? 'bg-primary' 
+                        : 'bg-muted-foreground/30'
+                    }`}
+                    onClick={() => setCurrentSlide(index)}
+                  />
+                ))}
+              </div>
             </div>
           ) : (
           <div className="space-y-4 text-right">
             {featuredProducts.map((product, index) => (
-              <Link key={product.id} to={`/product/${product.id}`}>
-                <Card className="bg-gradient-card border-0 shadow-soft hover-lift cursor-pointer">
-                  <CardContent className="p-6">
-                    <div className="flex items-center gap-6 text-right">
+              <Card key={product.id} className="bg-gradient-card border-0 shadow-soft hover-lift cursor-pointer">
+                <CardContent className="p-4 md:p-6">
+                  <div className="flex items-center gap-4 md:gap-6 text-right">
+                    <Link to={`/product/${product.id}`} className="flex-shrink-0">
                       <img 
                         src={product.image} 
                         alt={product.name}
-                        className="w-20 h-20 md:w-24 md:h-24 object-cover rounded-lg flex-shrink-0"
+                        className="w-16 h-16 md:w-24 md:h-24 object-cover rounded-lg"
                       />
-                      <div className="flex-1 text-right">
-                        <div className="flex items-center justify-end gap-2 mb-2">
-                          {product.isSale && <Badge className="bg-red-500 text-white">تخفیف</Badge>}
-                          {product.isNew && <Badge className="bg-green-500 text-white">جدید</Badge>}
+                    </Link>
+                    <div className="flex-1 text-right">
+                      <div className="flex items-center justify-end gap-2 mb-2">
+                        {product.isSale && <Badge className="bg-red-500 text-white text-xs">تخفیف</Badge>}
+                        {product.isNew && <Badge className="bg-green-500 text-white text-xs">جدید</Badge>}
+                      </div>
+                      <Link to={`/product/${product.id}`}>
+                        <h3 className="font-semibold text-base md:text-lg mb-2 text-right hover:text-primary transition-colors">{product.name}</h3>
+                      </Link>
+                      <div className="hidden md:block mb-3">
+                        <div className="flex flex-wrap gap-2 justify-end">
+                          <Badge variant="secondary" className="text-xs">جنس: ابریشم طبیعی</Badge>
+                          <Badge variant="secondary" className="text-xs">ابعاد: 180x70 سانتی‌متر</Badge>
+                          <Badge variant="secondary" className="text-xs">قابل شستشو</Badge>
                         </div>
-                        <h3 className="font-semibold text-lg mb-2 text-right">{product.name}</h3>
-                        <div className="hidden md:block mb-3">
-                          <div className="flex flex-wrap gap-2 justify-end">
-                            <Badge variant="secondary" className="text-xs">جنس: ابریشم طبیعی</Badge>
-                            <Badge variant="secondary" className="text-xs">ابعاد: 180x70 سانتی‌متر</Badge>
-                            <Badge variant="secondary" className="text-xs">قابل شستشو</Badge>
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-end gap-2">
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <Button
+                          size="sm"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            addToCart({
+                              id: product.id,
+                              name: product.name,
+                              price: product.price,
+                              image: product.image
+                            });
+                          }}
+                          className="flex items-center gap-1 md:gap-2 text-xs md:text-sm px-2 md:px-4"
+                        >
+                          <ShoppingCart className="w-3 h-3 md:w-4 md:h-4" />
+                          <span className="hidden md:inline">افزودن به سبد</span>
+                          <span className="md:hidden">افزودن</span>
+                        </Button>
+                        <div className="flex items-center gap-2 text-left">
                           {product.originalPrice && (
-                            <span className="text-sm text-muted-foreground line-through">
+                            <span className="text-xs md:text-sm text-muted-foreground line-through">
                               {product.originalPrice} تومان
                             </span>
                           )}
-                          <span className="font-bold text-primary text-lg">{product.price} تومان</span>
+                          <span className="font-bold text-primary text-sm md:text-lg">{product.price} تومان</span>
                         </div>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-              </Link>
+                  </div>
+                </CardContent>
+              </Card>
             ))}
           </div>
           )}

@@ -129,15 +129,40 @@ const Header = () => {
             <Cart />
           </div>
 
-          {/* Mobile Menu Button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden order-1 lg:order-none"
-            onClick={toggleMenu}
-          >
-            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </Button>
+          {/* Mobile Actions */}
+          <div className="flex items-center gap-2 md:hidden">
+            {isSearchOpen ? (
+              <form onSubmit={handleSearch} className="flex items-center gap-1">
+                <Input
+                  type="text"
+                  placeholder="جستجو..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-32"
+                  autoFocus
+                />
+                <Button type="submit" size="sm" variant="ghost">
+                  <Search className="w-4 h-4" />
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => setIsSearchOpen(false)}>
+                  <X className="w-4 h-4" />
+                </Button>
+              </form>
+            ) : (
+              <Button variant="ghost" size="sm" onClick={() => setIsSearchOpen(true)}>
+                <Search className="w-4 h-4" />
+              </Button>
+            )}
+            <Cart />
+            {/* Mobile Menu Button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleMenu}
+            >
+              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </Button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
@@ -213,13 +238,12 @@ const Header = () => {
               >
                 تماس با ما
               </Link>
-              <div className="flex items-center space-x-reverse space-x-4 pt-4 border-t border-border">
+              <div className="flex items-center pt-4 border-t border-border">
                 <Link to="/login" onClick={() => setIsMenuOpen(false)}>
                   <Button variant="outline" size="sm">
                     ورود / ثبت نام
                   </Button>
                 </Link>
-                <Cart />
               </div>
             </nav>
           </div>
