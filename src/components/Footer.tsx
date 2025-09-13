@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Instagram, Phone, Mail, MapPin, Send } from 'lucide-react';
+import { Instagram, Phone, Mail, MapPin, Send, MessageCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -27,10 +27,7 @@ const Footer = () => {
                 <Send className="w-4 h-4 md:w-5 md:h-5" />
               </Button>
               <Button variant="ghost" size="sm" className="text-primary-foreground hover:bg-accent/20 hover:text-accent p-2">
-                <svg className="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 1L3 9v11c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V9l-9-8zM12 3.69L18 9v11H6V9l6-5.31z"/>
-                  <path d="M8 11h8v2H8v-2zm0 4h8v2H8v-2z"/>
-                </svg>
+                <MessageCircle className="w-4 h-4 md:w-5 md:h-5" />
               </Button>
             </div>
           </div>

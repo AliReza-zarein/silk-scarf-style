@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { User, Search, Menu, X, ChevronDown } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import Cart from './Cart';
@@ -9,6 +10,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMobileSearchModal, setIsMobileSearchModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
@@ -20,6 +22,7 @@ const Header = () => {
       navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
       setSearchQuery('');
       setIsSearchOpen(false);
+      setIsMobileSearchModal(false);
     }
   };
 
@@ -131,28 +134,9 @@ const Header = () => {
 
           {/* Mobile Actions */}
           <div className="flex items-center gap-2 md:hidden">
-            {isSearchOpen ? (
-              <form onSubmit={handleSearch} className="flex items-center gap-1">
-                <Input
-                  type="text"
-                  placeholder="جستجو..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-32"
-                  autoFocus
-                />
-                <Button type="submit" size="sm" variant="ghost">
-                  <Search className="w-4 h-4" />
-                </Button>
-                <Button variant="ghost" size="sm" onClick={() => setIsSearchOpen(false)}>
-                  <X className="w-4 h-4" />
-                </Button>
-              </form>
-            ) : (
-              <Button variant="ghost" size="sm" onClick={() => setIsSearchOpen(true)}>
-                <Search className="w-4 h-4" />
-              </Button>
-            )}
+            <Button variant="ghost" size="sm" onClick={() => setIsMobileSearchModal(true)}>
+              <Search className="w-4 h-4" />
+            </Button>
             <Cart />
             {/* Mobile Menu Button */}
             <Button
@@ -167,7 +151,7 @@ const Header = () => {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden mt-4 pb-4 border-t border-border pt-4 animate-fade-in">
+          <div className="md:hidden mt-4 pb-4 border-t border-border pt-4 animate-fade-in text-right">
             <nav className="flex flex-col space-y-4">
               <Link 
                 to="/" 
@@ -248,6 +232,33 @@ const Header = () => {
             </nav>
           </div>
         )}
+
+        {/* Mobile Search Modal */}
+        <Dialog open={isMobileSearchModal} onOpenChange={setIsMobileSearchModal}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle className="text-right">جستجو در محصولات</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleSearch} className="space-y-4">
+              <Input
+                type="text"
+                placeholder="نام محصول را وارد کنید..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full text-right"
+                autoFocus
+              />
+              <div className="flex gap-2 justify-end">
+                <Button type="button" variant="outline" onClick={() => setIsMobileSearchModal(false)}>
+                  انصراف
+                </Button>
+                <Button type="submit">
+                  جستجو
+                </Button>
+              </div>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
     </header>
   );
