@@ -49,7 +49,7 @@ const Products = () => {
   const [sortBy, setSortBy] = useState('newest');
   const [currentPage, setCurrentPage] = useState(1);
   const [viewMode, setViewMode] = useState('grid');
-  const { addToCart } = useCart();
+  const { addToCart, items } = useCart();
   const itemsPerPage = 8;
 
   // اسکرول به بالای صفحه
@@ -105,9 +105,9 @@ const Products = () => {
             </div>
           </div>
           
-          <div className="flex gap-4 w-full md:w-auto justify-end">
+          <div className="flex gap-4 w-full md:w-auto">
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="w-full md:w-48">
+              <SelectTrigger className="w-full md:w-48 text-right">
                 <SelectValue placeholder="دسته‌بندی" />
               </SelectTrigger>
               <SelectContent>
@@ -120,7 +120,7 @@ const Products = () => {
             </Select>
             
             <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-full md:w-48">
+              <SelectTrigger className="w-full md:w-48 text-right">
                 <SelectValue placeholder="مرتب‌سازی" />
               </SelectTrigger>
               <SelectContent>
@@ -185,7 +185,15 @@ const Products = () => {
                             className="relative"
                           >
                             <ShoppingCart className="w-4 h-4" />
-                            <span className="hidden md:inline ml-2">افزودن به سبد</span>
+                            <span className="hidden sm:inline ml-2">افزودن به سبد</span>
+                            {(() => {
+                              const cartQuantity = items.find(item => item.id === product.id.toString())?.quantity || 0;
+                              return cartQuantity > 0 ? (
+                                <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                                  {cartQuantity}
+                                </span>
+                              ) : null;
+                            })()}
                           </Button>
                           <div className="flex items-center gap-2">
                             {product.originalPrice && (

@@ -32,12 +32,12 @@ const Cart = () => {
       <SheetTrigger asChild>
         <Button variant="ghost" size="icon" className="relative">
           <ShoppingCart className="w-5 h-5" />
-          {getTotalItems() > 0 && (
+          {items.length > 0 && (
             <Badge 
               variant="destructive" 
               className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center p-0 text-xs"
             >
-              {getTotalItems()}
+              {items.length}
             </Badge>
           )}
         </Button>

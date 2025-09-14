@@ -18,7 +18,7 @@ import scarf2 from '@/assets/scarf2.jpg';
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [viewMode, setViewMode] = useState('grid');
-  const { addToCart } = useCart();
+  const { addToCart, items } = useCart();
 
   const featuredProducts = [
     {
@@ -183,9 +183,9 @@ const Home = () => {
                 {featuredProducts.map((_, index) => (
                   <button
                     key={index}
-                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    className={`w-3 h-3 rounded-full transition-all duration-300 transform hover:scale-105 ${
                       index === currentSlide % featuredProducts.length 
-                        ? 'bg-primary scale-110 shadow-lg' 
+                        ? 'bg-primary scale-110 shadow-lg animate-pulse' 
                         : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
                     }`}
                     onClick={() => setCurrentSlide(index)}
@@ -226,6 +226,7 @@ const Home = () => {
                           size="sm"
                           onClick={(e) => {
                             e.preventDefault();
+                            const cartQuantity = items.find(item => item.id === product.id)?.quantity || 0;
                             addToCart({
                               id: product.id,
                               name: product.name,
@@ -237,6 +238,14 @@ const Home = () => {
                         >
                           <ShoppingCart className="w-4 h-4" />
                           <span className="hidden md:inline ml-2">افزودن به سبد</span>
+                          {(() => {
+                            const cartQuantity = items.find(item => item.id === product.id)?.quantity || 0;
+                            return cartQuantity > 0 ? (
+                              <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                                {cartQuantity}
+                              </span>
+                            ) : null;
+                          })()}
                         </Button>
                         <div className="flex items-center gap-2 text-left">
                           {product.originalPrice && (
