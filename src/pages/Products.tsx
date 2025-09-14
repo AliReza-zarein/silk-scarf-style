@@ -105,29 +105,29 @@ const Products = () => {
             </div>
           </div>
           
-          <div className="flex gap-4 w-full md:w-auto">
+          <div className="flex gap-4 w-full md:w-auto justify-end">
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="w-full md:w-48 text-right">
+              <SelectTrigger className="w-full md:w-48">
                 <SelectValue placeholder="دسته‌بندی" />
               </SelectTrigger>
-              <SelectContent className="text-right" align="end">
-                <SelectItem value="all" className="text-right">همه محصولات</SelectItem>
-                <SelectItem value="scarves" className="text-right">شال</SelectItem>
-                <SelectItem value="hijabs" className="text-right">روسری</SelectItem>
-                <SelectItem value="mantuas" className="text-right">مانتو</SelectItem>
-                <SelectItem value="bags" className="text-right">کیف</SelectItem>
+              <SelectContent>
+                <SelectItem value="all">همه محصولات</SelectItem>
+                <SelectItem value="scarves">شال</SelectItem>
+                <SelectItem value="hijabs">روسری</SelectItem>
+                <SelectItem value="mantuas">مانتو</SelectItem>
+                <SelectItem value="bags">کیف</SelectItem>
               </SelectContent>
             </Select>
             
             <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-full md:w-48 text-right">
+              <SelectTrigger className="w-full md:w-48">
                 <SelectValue placeholder="مرتب‌سازی" />
               </SelectTrigger>
-              <SelectContent className="text-right" align="end">
-                <SelectItem value="newest" className="text-right">جدیدترین</SelectItem>
-                <SelectItem value="price-low" className="text-right">قیمت (کم به زیاد)</SelectItem>
-                <SelectItem value="price-high" className="text-right">قیمت (زیاد به کم)</SelectItem>
-                <SelectItem value="popular" className="text-right">محبوب‌ترین</SelectItem>
+              <SelectContent>
+                <SelectItem value="newest">جدیدترین</SelectItem>
+                <SelectItem value="price-low">قیمت (کم به زیاد)</SelectItem>
+                <SelectItem value="price-high">قیمت (زیاد به کم)</SelectItem>
+                <SelectItem value="popular">محبوب‌ترین</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -182,11 +182,10 @@ const Products = () => {
                                 image: product.image
                               });
                             }}
-                            className="flex items-center gap-1 md:gap-2 text-xs md:text-sm px-2 md:px-4"
+                            className="relative"
                           >
-                            <ShoppingCart className="w-3 h-3 md:w-4 md:h-4" />
-                            <span className="hidden md:inline">افزودن به سبد</span>
-                            <span className="md:hidden">افزودن</span>
+                            <ShoppingCart className="w-4 h-4" />
+                            <span className="hidden md:inline ml-2">افزودن به سبد</span>
                           </Button>
                           <div className="flex items-center gap-2">
                             {product.originalPrice && (

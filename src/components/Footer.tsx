@@ -27,7 +27,9 @@ const Footer = () => {
                 <Send className="w-4 h-4 md:w-5 md:h-5" />
               </Button>
               <Button variant="ghost" size="sm" className="text-primary-foreground hover:bg-accent/20 hover:text-accent p-2">
-                <MessageCircle className="w-4 h-4 md:w-5 md:h-5" />
+                <svg className="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2V7zm0 8h2v2h-2v-2z"/>
+                </svg>
               </Button>
             </div>
           </div>

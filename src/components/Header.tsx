@@ -134,9 +134,32 @@ const Header = () => {
 
           {/* Mobile Actions */}
           <div className="flex items-center gap-2 md:hidden">
-            <Button variant="ghost" size="sm" onClick={() => setIsMobileSearchModal(true)}>
-              <Search className="w-4 h-4" />
-            </Button>
+            {isSearchOpen ? (
+              <div className="relative flex-1 max-w-48">
+                <form onSubmit={handleSearch} className="relative">
+                  <Input
+                    type="text"
+                    placeholder="جستجو..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full bg-background/60 backdrop-blur-sm border-border/50 text-right pr-3 pl-10"
+                    autoFocus
+                  />
+                  <Button 
+                    type="submit" 
+                    size="sm" 
+                    variant="ghost" 
+                    className="absolute left-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0"
+                  >
+                    <Search className="w-4 h-4" />
+                  </Button>
+                </form>
+              </div>
+            ) : (
+              <Button variant="ghost" size="sm" onClick={() => setIsSearchOpen(true)}>
+                <Search className="w-4 h-4" />
+              </Button>
+            )}
             <Cart />
             {/* Mobile Menu Button */}
             <Button
@@ -169,43 +192,55 @@ const Header = () => {
               </Link>
               
               {/* Mobile Categories */}
-              <div className="space-y-2 pr-4 border-r-2 border-muted">
-                <div className="text-sm font-medium text-muted-foreground">دسته‌بندی:</div>
-                <Link 
-                  to="/category/scarves" 
-                  className="block text-sm text-foreground hover:text-primary transition-colors duration-300"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  شال
-                </Link>
-                <Link 
-                  to="/category/hijabs" 
-                  className="block text-sm text-foreground hover:text-primary transition-colors duration-300"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  روسری
-                </Link>
-                <Link 
-                  to="/category/mantuas" 
-                  className="block text-sm text-foreground hover:text-primary transition-colors duration-300"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  مانتو
-                </Link>
-                <Link 
-                  to="/category/bags" 
-                  className="block text-sm text-foreground hover:text-primary transition-colors duration-300"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  کیف
-                </Link>
-                <Link 
-                  to="/category/accessories" 
-                  className="block text-sm text-foreground hover:text-primary transition-colors duration-300"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  لوازم جانبی
-                </Link>
+              <div 
+                className="relative group"
+                onMouseEnter={() => setIsCategoriesOpen(true)}
+                onMouseLeave={() => setIsCategoriesOpen(false)}
+              >
+                <button className="flex items-center justify-between w-full text-foreground hover:text-primary transition-colors duration-300 py-2">
+                  <span>دسته‌بندی</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isCategoriesOpen ? 'rotate-180' : ''}`} />
+                </button>
+                
+                {isCategoriesOpen && (
+                  <div className="pr-4 border-r-2 border-muted space-y-2 mt-2 animate-fade-in">
+                    <Link 
+                      to="/category/scarves" 
+                      className="block text-sm text-foreground hover:text-primary transition-colors duration-300"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      شال
+                    </Link>
+                    <Link 
+                      to="/category/hijabs" 
+                      className="block text-sm text-foreground hover:text-primary transition-colors duration-300"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      روسری
+                    </Link>
+                    <Link 
+                      to="/category/mantuas" 
+                      className="block text-sm text-foreground hover:text-primary transition-colors duration-300"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      مانتو
+                    </Link>
+                    <Link 
+                      to="/category/bags" 
+                      className="block text-sm text-foreground hover:text-primary transition-colors duration-300"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      کیف
+                    </Link>
+                    <Link 
+                      to="/category/accessories" 
+                      className="block text-sm text-foreground hover:text-primary transition-colors duration-300"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      لوازم جانبی
+                    </Link>
+                  </div>
+                )}
               </div>
               
               <Link 
@@ -233,32 +268,6 @@ const Header = () => {
           </div>
         )}
 
-        {/* Mobile Search Modal */}
-        <Dialog open={isMobileSearchModal} onOpenChange={setIsMobileSearchModal}>
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle className="text-right">جستجو در محصولات</DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleSearch} className="space-y-4">
-              <Input
-                type="text"
-                placeholder="نام محصول را وارد کنید..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full text-right"
-                autoFocus
-              />
-              <div className="flex gap-2 justify-end">
-                <Button type="button" variant="outline" onClick={() => setIsMobileSearchModal(false)}>
-                  انصراف
-                </Button>
-                <Button type="submit">
-                  جستجو
-                </Button>
-              </div>
-            </form>
-          </DialogContent>
-        </Dialog>
       </div>
     </header>
   );

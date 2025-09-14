@@ -163,7 +163,7 @@ const Home = () => {
           </div>
 
           {viewMode === 'grid' ? (
-            <div className="text-center relative">
+            <div className="relative">
               <Carousel className="w-full max-w-7xl mx-auto" opts={{ align: "center", loop: true }}>
                 <CarouselContent className="text-right">
                   {featuredProducts.map((product, index) => (
@@ -174,18 +174,19 @@ const Home = () => {
                     </CarouselItem>
                   ))}
                 </CarouselContent>
-                <CarouselPrevious className="left-auto right-12" />
-                <CarouselNext className="right-4" />
+                <CarouselPrevious className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-background/80 backdrop-blur-sm hover:bg-background border shadow-lg z-10" />
+                <CarouselNext className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-background/80 backdrop-blur-sm hover:bg-background border shadow-lg z-10" />
               </Carousel>
+              
               {/* Slide Indicators */}
               <div className="flex justify-center gap-2 mt-6">
                 {featuredProducts.map((_, index) => (
                   <button
                     key={index}
-                    className={`w-2 h-2 rounded-full transition-colors ${
+                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
                       index === currentSlide % featuredProducts.length 
-                        ? 'bg-primary' 
-                        : 'bg-muted-foreground/30'
+                        ? 'bg-primary scale-110 shadow-lg' 
+                        : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
                     }`}
                     onClick={() => setCurrentSlide(index)}
                   />
@@ -232,11 +233,10 @@ const Home = () => {
                               image: product.image
                             });
                           }}
-                          className="flex items-center gap-1 md:gap-2 text-xs md:text-sm px-2 md:px-4"
+                          className="relative"
                         >
-                          <ShoppingCart className="w-3 h-3 md:w-4 md:h-4" />
-                          <span className="hidden md:inline">افزودن به سبد</span>
-                          <span className="md:hidden">افزودن</span>
+                          <ShoppingCart className="w-4 h-4" />
+                          <span className="hidden md:inline ml-2">افزودن به سبد</span>
                         </Button>
                         <div className="flex items-center gap-2 text-left">
                           {product.originalPrice && (

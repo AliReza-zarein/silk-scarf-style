@@ -24,8 +24,11 @@ const ProductCard = ({
   isNew = false, 
   isSale = false 
 }: ProductCardProps) => {
-  const { addToCart } = useCart();
+  const { addToCart, items } = useCart();
   const { addToWishlist, isInWishlist, removeFromWishlist } = useWishlist();
+
+  // Get quantity of this product in cart
+  const cartQuantity = items.find(item => item.id === id)?.quantity || 0;
 
   const handleAddToCart = () => {
     addToCart({ id, name, price, image });
@@ -79,8 +82,13 @@ const ProductCard = ({
                 مشاهده جزئیات
               </Button>
             </Link>
-            <Button variant="default" size="sm" onClick={handleAddToCart}>
+            <Button variant="default" size="sm" onClick={handleAddToCart} className="relative">
               <ShoppingCart className="w-4 h-4" />
+              {cartQuantity > 0 && (
+                <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                  {cartQuantity}
+                </span>
+              )}
             </Button>
           </div>
         </div>
